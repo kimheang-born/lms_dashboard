@@ -10,16 +10,42 @@
 		<v-row justify="center">
 			<v-col cols="12">
 				<v-card>
-					<v-card-title>
-						<v-text-field
-							v-model="search"
-							append-icon="mdi-magnify"
-							label="Search"
-							single-line
-							hide-details
-						></v-text-field>
-					</v-card-title>
-					<v-data-table :headers="headers" :items="desserts" :search="search"></v-data-table>
+					<div class="v-data-table v-data-table--has-bottom theme--light">
+						<div class="v-data-table__wrapper">
+							<table class="table">
+								<thead class="v-data-table-header">
+									<tr>
+										<th scope="col">ID</th>
+										<th scope="col">salutation</th>
+										<th scope="col">first_name</th>
+										<th scope="col">last_name</th>
+										<th scope="col">gender</th>
+										<th scope="col">date_of_birth</th>
+										<th scope="col">nationality</th>
+										<th scope="col">mobile_phone</th>
+										<th scope="col">email</th>
+										<th scope="col">identity_card_number</th>
+										<th scope="col">address</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr v-for="contact in contacts" :key="contact.id">
+										<td class="text-start">{{ contact.id }}</td>
+										<td class="text-start">{{ contact.salutation }}</td>
+										<td class="text-start">{{ contact.first_name }}</td>
+										<td class="text-start">{{ contact.last_name }}</td>
+										<td class="text-start">{{ contact.gender }}</td>
+										<td class="text-start">{{ contact.date_of_birth }}</td>
+										<td class="text-start">{{ contact.nationality }}</td>
+										<td class="text-start">{{ contact.mobile_phone }}</td>
+										<td class="text-start">{{ contact.email }}</td>
+										<td class="text-start">{{ contact.identity_card_number }}</td>
+										<td class="text-start">{{ contact.address }}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
 				</v-card>
 			</v-col>
 		</v-row>
@@ -27,6 +53,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
 	data() {
 		return {
@@ -126,6 +153,15 @@ export default {
 					iron: '6%',
 				},
 			],
+		};
+	},
+	async asyncData() {
+		const contacts = await axios
+			.get('http://127.0.0.1:8000/contact')
+			.then((res) => res.data)
+			.catch((err) => console.log(err));
+		return {
+			contacts,
 		};
 	},
 };
