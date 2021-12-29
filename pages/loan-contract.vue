@@ -10,16 +10,40 @@
 		<v-row justify="center">
 			<v-col cols="12">
 				<v-card>
-					<v-card-title>
-						<v-text-field
-							v-model="search"
-							append-icon="mdi-magnify"
-							label="Search"
-							single-line
-							hide-details
-						></v-text-field>
-					</v-card-title>
-					<v-data-table :headers="headers" :items="desserts" :search="search"></v-data-table>
+					<div class="v-data-table v-data-table--has-bottom theme--light">
+						<div class="v-data-table__wrapper">
+							<table class="table">
+								<thead class="v-data-table-header">
+									<tr>
+										<th scope="col">ID</th>
+										<th scope="col">Property ID</th>
+										<th scope="col">Financial Institution</th>
+										<th scope="col">Loan Purpose</th>
+										<th scope="col">Loan type</th>
+										<th scope="col">Request amount</th>
+										<th scope="col">Approved amount</th>
+										<th scope="col">Disbursement date</th>
+										<th scope="col">First collection date</th>
+										<th scope="col">Maturity date</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr v-for="loan in loans" :key="loan.id">
+										<td class="text-start">{{ loan.id }}</td>
+										<td class="text-start">{{ loan.property_id }}</td>
+										<td class="text-start">{{ loan.financial_institution }}</td>
+										<td class="text-start">{{ loan.loan_purpose }}</td>
+										<td class="text-start">{{ loan.loan_type }}</td>
+										<td class="text-start">{{ loan.request_amount }}</td>
+										<td class="text-start">{{ loan.approved_amount }}</td>
+										<td class="text-start">{{ loan.disbursement_date }}</td>
+										<td class="text-start">{{ loan.first_collection_date }}</td>
+										<td class="text-start">{{ loan.maturity_date }}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
 				</v-card>
 			</v-col>
 		</v-row>
@@ -27,6 +51,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
 	data() {
 		return {
@@ -126,6 +152,15 @@ export default {
 					iron: '6%',
 				},
 			],
+		};
+	},
+	async asyncData() {
+		const loans = await axios
+			.get('http://127.0.0.1:8000/loan-contract')
+			.then((res) => res.data)
+			.catch((err) => console.log(err));
+		return {
+			loans,
 		};
 	},
 };

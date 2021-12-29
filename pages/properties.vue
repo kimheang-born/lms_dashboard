@@ -10,16 +10,32 @@
 		<v-row justify="center">
 			<v-col cols="12">
 				<v-card>
-					<v-card-title>
-						<v-text-field
-							v-model="search"
-							append-icon="mdi-magnify"
-							label="Search"
-							single-line
-							hide-details
-						></v-text-field>
-					</v-card-title>
-					<v-data-table :headers="headers" :items="desserts" :search="search"></v-data-table>
+					<div class="v-data-table v-data-table--has-bottom theme--light">
+						<div class="v-data-table__wrapper">
+							<table class="table">
+								<thead class="v-data-table-header">
+									<tr>
+										<th scope="col">ID</th>
+										<th scope="col">Type</th>
+										<th scope="col">Sale price</th>
+										<th scope="col">Width</th>
+										<th scope="col">Length</th>
+										<th scope="col">Total area</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr v-for="property in properties" :key="property.id">
+										<td class="text-start">{{ property.id }}</td>
+										<td class="text-start">{{ property.type }}</td>
+										<td class="text-start">{{ property.sale_price }}</td>
+										<td class="text-start">{{ property.width }}</td>
+										<td class="text-start">{{ property.length }}</td>
+										<td class="text-start">{{ property.area }}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
 				</v-card>
 			</v-col>
 		</v-row>
@@ -27,6 +43,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
 	data() {
 		return {
@@ -126,6 +144,15 @@ export default {
 					iron: '6%',
 				},
 			],
+		};
+	},
+	async asyncData() {
+		const properties = await axios
+			.get('http://127.0.0.1:8000/property')
+			.then((res) => res.data)
+			.catch((err) => console.log(err));
+		return {
+			properties,
 		};
 	},
 };
